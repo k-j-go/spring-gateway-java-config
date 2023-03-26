@@ -40,7 +40,7 @@ public class MyRewritePathGatewayFilterFactory extends AbstractGatewayFilterFact
             ServerHttpRequest request = exchange.getRequest();
             String path = request.getURI().getPath();
             //String newPath = path + "/" + config.getNewSegment();
-            String newPath = "/posts/1";
+            String newPath = "/posts/3";
             ServerHttpRequest newRequest = request.mutate().path(newPath).build();
             return chain.filter(exchange.mutate().request(newRequest).build());
         };

@@ -5,6 +5,7 @@ import com.azunitech.search.factories.MyRewritePathGatewayFilterFactory;
 import com.azunitech.search.factories.MyRoutePredicateFactory;
 import com.azunitech.search.filters.MyGatewayFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.filter.factory.AddRequestHeaderGatewayFilterFactory;
 import org.springframework.cloud.gateway.filter.factory.RetryGatewayFilterFactory;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -58,7 +59,7 @@ public class RouteConfig {
                                             .filter(myRewritePathGatewayFilterFactory.apply(new MyRewritePathGatewayFilterFactory.Config("get")))
                                             .filter(myFilterFactory.apply(new MyGatewayFilterFactory.Config()))
                                             .filter(
-                                                    retryGatewayFilterFactory().apply(
+                                                    new RetryGatewayFilterFactory().apply(
                                                             new RetryGatewayFilterFactory.RetryConfig()
                                                                     .setRetries(3)
                                                                     .setBackoff(bConfig)
@@ -68,6 +69,7 @@ public class RouteConfig {
                                             return f;
                                         }
                                 )
+
                         .uri("http://127.0.0.1:3000/posts"))
                 .route("post_route", r -> r.path("/post")
                         //Add predicate factory
@@ -82,9 +84,6 @@ public class RouteConfig {
                 .build();
     }
 
-    @Bean
-    public RetryGatewayFilterFactory retryGatewayFilterFactory() {
-        return new RetryGatewayFilterFactory();
-    }
+
 
 }
