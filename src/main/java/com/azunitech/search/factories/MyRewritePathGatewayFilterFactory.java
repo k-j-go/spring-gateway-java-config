@@ -10,6 +10,8 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
+import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.addOriginalRequestUrl;
+
 /**
  * using path rewrite
  * original path is posts
@@ -38,6 +40,8 @@ public class MyRewritePathGatewayFilterFactory extends AbstractGatewayFilterFact
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
+            addOriginalRequestUrl(exchange, request.getURI());
+
             String path = request.getURI().getPath();
             //String newPath = path + "/" + config.getNewSegment();
             String newPath = "/posts/3";
